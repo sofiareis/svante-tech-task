@@ -1,5 +1,6 @@
 import Papa from 'papaparse';
 import { useEffect, useState } from 'react';
+import './CSVParser.css'
 
 function CSVParser() {
   const [data, setData] = useState([]);
@@ -18,9 +19,9 @@ function CSVParser() {
     const file = e.target.files[0];
     parseCSV(file);
   };
+  
   //complete: a callback function that is executed when the parsing process is completed successfully
   const parseCSV = (file) => {
-    console.log('er')
     Papa.parse(file, {
       header: false, //true if our file has header row
       complete: (res) => {
@@ -32,19 +33,17 @@ function CSVParser() {
           values.push(Object.values(d))
         })
 
-        console.log('ersefd')
         setData(res.data);
         setCol(col[0]);
         setValues(values);
-        console.log(res.data)
       }
     })
   }
 
   
   return (
-    <div className="App">
-      <label htmlFor='fileInput'>Upload a different CSV file:</label>
+    <div className="csvParser">
+      <label htmlFor='fileInput' className=''>Upload a different CSV file:</label>
       <input
         type='file'
         id='fileInput'
@@ -53,19 +52,19 @@ function CSVParser() {
         onChange={handleFileChange}>
       </input>
 
-      <table>
-        <thead>
+      <table className='table'>
+        <thead className='table-header'>
           <tr>
               {col.map((col, index) => (
-                <th key={index}>{col}</th>
+                <th key={index} className='header-items'>Column {col}</th>
               ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody >
             {values.map((value, index) => (
-                <tr key={index}>
+                <tr key={index} className='table-row'>
                   {value.map((rowVal, index) => (
-                    <td key={index}>{rowVal}</td>
+                    <td key={index} className='row-items'>{rowVal}</td>
                   ))}
                 </tr>
             ))}
