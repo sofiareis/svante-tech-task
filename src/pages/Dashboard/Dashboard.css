@@ -1,0 +1,21 @@
+.landing{
+    margin: 30px;
+}
+
+.landing-title{
+
+}
+
+.landing-data{
+    display: flex;
+}
+
+.data-title{
+
+}
+
+.data-col{
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+}

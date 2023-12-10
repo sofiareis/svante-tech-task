@@ -19,7 +19,7 @@ function CSVParser() {
     const file = e.target.files[0];
     parseCSV(file);
   };
-  
+
   //complete: a callback function that is executed when the parsing process is completed successfully
   const parseCSV = (file) => {
     Papa.parse(file, {
@@ -43,7 +43,6 @@ function CSVParser() {
   
   return (
     <div className="csvParser">
-      <label htmlFor='fileInput' className=''>Upload a different CSV file:</label>
       <input
         type='file'
         id='fileInput'
