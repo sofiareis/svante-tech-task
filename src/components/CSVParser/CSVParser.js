@@ -1,6 +1,5 @@
 import Papa from 'papaparse';
 import './CSVParser.css'
-import { useEffect } from 'react';
 
 function CSVParser({ onDataParsed }) {
   const handleFileChange = (e) => {
