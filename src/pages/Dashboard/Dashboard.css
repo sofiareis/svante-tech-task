@@ -1,21 +1,140 @@
 .landing{
-    margin: 30px;
+    margin: 30px 60px;
+    max-width: 1300px;
+    z-index: 1;
+    width: 100%;
+}
+
+.landing-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .landing-title{
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+    color: #333;
+}
 
+.landing-graph{
+    display: grid;
+    grid-template-columns: auto 1fr;
+}
+
+.landing-graph-options{
+    justify-self: flex-start;
+}
+
+.landing-graph-display{
+   margin-left: 50px;
+   align-self: center;
+}
+
+.button-graph-select{
+    width: 120px;
+    font-size: 16px;
+    padding: 8px 0;
+    cursor: pointer;
+    transition: .3s;
+    display: inline-block;
+    text-align: center;
+    border: solid 1.5px #000;
+    background-color: #EDF6FD;
+    margin: 20px 5px;
+    border-radius: 5px;
+}
+
+.button-graph-select:nth-child(1){
+    margin-left: 0px;
+}
+
+.button-graph-select:hover {
+    background: #A4DEF9;
+    color: black;
 }
 
 .landing-data{
-    display: flex;
+    display: grid;
+    grid-template-columns: auto 1fr;
 }
 
 .data-title{
-
+    margin-top: 40px;
+    margin-bottom: 10px;
 }
 
 .data-col{
     display: flex;
-    flex-direction: column;
-    padding-left: 10px;
+    flex-direction: column;   
 }
+
+.data-col:nth-child(1)  {
+    margin-right: 20px;
+}
+
+@media screen and (max-width: 905px) {
+    .landing-graph{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .data-col{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .data-col:nth-child(1)  {
+        margin-right: 10px;
+    }
+
+    .landing-data{
+        display: grid;
+        grid-template-columns: 30% 1fr;
+    }
+
+    .landing-graph-display{
+        margin-left: 0px;
+        align-self: center;
+     }
+}
+
+
+@media screen and (max-width: 600px) {
+    .landing{
+        margin: 30px 40px;
+    }
+
+    .landing-data{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .data-col{
+        margin-right: 0px;
+    }
+
+    .data-col:nth-child(1)  {
+        max-width: 140px;
+        margin-right: 0px;
+    }
+
+    .landing-title{
+        font-size: 2rem;
+        margin-bottom: 30px;
+
+    }
+
+    .data-title{
+        font-size: 1.3rem;
+    }
+
+    .button-graph-select{
+        width: 95px;
+        font-size: 14px;
+        padding: 6px 0;
+        margin: 10px 5px;
+        margin-bottom: 20px;
+    }
+}
+
