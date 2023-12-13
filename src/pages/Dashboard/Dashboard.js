@@ -67,8 +67,8 @@ function Dashboard() {
           <div className='landing-graph-options'>
             <button className='button-graph-select' onClick={showColorGraph}>Color Graph</button>
             <button className='button-graph-select' onClick={showSizeGraph}>Size Graph</button>
-            <Dropdown data={time} onDataSelected={handleTimeSelected}/>
-            <Dropdown data={nodes} onDataSelected={handleNodeSelected}/>
+            <Dropdown data={time} onDataSelected={handleTimeSelected} type={'times'}/>
+            <Dropdown data={nodes} onDataSelected={handleNodeSelected} type={'nodes'}/>
           </div>
           {colorGraph && 
             <div className='landing-graph-display'>

@@ -27,11 +27,13 @@ function Dropdown({data, onDataSelected, type}) {
       setSelectItem([selectedOptions]);
       onDataSelected && onDataSelected([selectedOptions]);
     }
+    toggleDropdownItem()
   };
 
   const handleDropdownItem = (index) => {
       setSelectItem([index]);
       onDataSelected && onDataSelected([index]); 
+      toggleDropdownItem()
   };
 
   const isItemSelected = (index) => selectItem.includes(index);
@@ -39,11 +41,13 @@ function Dropdown({data, onDataSelected, type}) {
   return (
     <div>
         <label className='dropdown-label'>
-          Select over which item to display:
+          Select over which {type} to display:
           <div className={`dropdown-custom-dropdown ${isDropdownItemOpen ? 'open' : ''}`}>
             <div className="selected-values" onClick={toggleDropdownItem}>
               {selectItem.length === item.length
-                ? 'Over all items'
+                ? `Over all ${type}`
+                : selectItem.length == 0 
+                ? `Select ${type}`
                 : selectItem.map((index) => item[index])}
             </div>
             {isDropdownItemOpen && (
@@ -53,7 +57,7 @@ function Dropdown({data, onDataSelected, type}) {
                   key="-1"
                   onClick={() => handleColumnItemSelect({ target: { value: -1 } })}
                 >
-                  Over all items
+                  Over all {type}
                 </div>
                 {item.map((column, index) => (
                   <div 
