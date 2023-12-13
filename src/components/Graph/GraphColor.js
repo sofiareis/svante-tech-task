@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faForward, faBackward } from "@fortawesome/free-solid-svg-icons";
 
 
-function GraphColor({ dataset, time, row, column, type = 'color', velocity = 800 }) {
+function GraphColor({ dataset, time, row, column, velocity = 800 }) {
     const concentrationGraphRef = useRef(null)
     const [animationEnabled, setAnimationEnabled] = useState(false);
     const [iter, setIter] = useState(0);
@@ -37,9 +37,9 @@ function GraphColor({ dataset, time, row, column, type = 'color', velocity = 800
         drawChart();
     };
 
-    const width =  type == 'size'? 400 :450;
-    const height = type == 'size'? 300 : 150;
-    const margin = type == 'size'? { top: 50, right: 70, bottom: 80, left: 70 } :  { top: 20, right: 80, bottom: 70, left: 50 };
+    const width = 450;
+    const height = 150;
+    const margin = { top: 20, right: 80, bottom: 70, left: 50 };
     
     const yScale = d3
             .scaleLinear()
@@ -68,8 +68,6 @@ function GraphColor({ dataset, time, row, column, type = 'color', velocity = 800
         } else if (column.length == 1){
             setInitTime(time[0])
             setData(dataset.map((val, i) => [val[column]]))
-            console.log(dataset)
-            console.log('here' + [dataset.map((val, i) => val[column])])
             initLabels.push(column);
             setInitData([dataset[0][column]])
         } else{
@@ -146,78 +144,39 @@ function GraphColor({ dataset, time, row, column, type = 'color', velocity = 800
             .style("visibility", "hidden")
             .style("background", "white")
             .text("tooltip");
+    
+        const bar = svg
+        .append("g")
+        .selectAll("rect")
+        .data(initData)
+        .join("rect")
+        .attr("fill", d => colorScale(d))
+        .join("rect")
+        .style("mix-blend-mode", "multiply") 
+        .attr('class', 'bar')
+        .attr("x", (d, i) => xScale(labels[i]) - barWidth / 2) // center the bars on the tick marks
+        .attr("y", height - 100)
+        .attr("height", 100)
+        .attr("width", barWidth)
+        .text(function(d) { return d; })
+        .on("mouseover", function(event, d){
+            return tooltip.style("visibility", "visible");})
+        .on("mousemove", function(event, d){
+            tooltip.text(d);
+            return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+        .on("mouseout", function(){
+            return tooltip.style("visibility", "hidden");})
         
-        if (type == 'size'){
-            const bar = svg
-            .append("g")
-            .selectAll("rect")
-            .data(initData)
-            .join("rect")
-            .attr("fill", d => colorScale(d))
-            .join("rect")
-            .style("mix-blend-mode", "multiply") 
-            .attr('class', 'bar')
-            .attr("x", (d, i) => xScale(labels[i]) - (xScale(labels[1]) - xScale(labels[0])) / 2) // center the bars on the tick marks
-            .attr("y", d => yScale(d))
-            .attr("height", d => yScale(0) - yScale(d))
-            .attr("width", (xScale(labels[1]) - xScale(labels[0])) * 0.8)
-            .text(function(d) { return d; })
-            .on("mouseover", function(event, d){
-                return tooltip.style("visibility", "visible");})
-            .on("mousemove", function(event, d){
-                tooltip.text(d);
-                return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-            .on("mouseout", function(){
-                return tooltip.style("visibility", "hidden");})
-
-            svg
-            .append('g')
-            .attr('class', 'y-axis')
-            .call(d3.axisLeft(yScale));
-
-            svg
+        svg
             .append('text')
             .attr('class', 'chart-title')
             .attr('x', width / 2)
-            .attr('y', -20)
+            .attr('y', margin.top - 10)
             .attr('text-anchor', 'middle')
             .style('font-size', '16px')
             .style('font-weight', 'bold')
             .text('Time: ' + initTime + 's');
-        
-        }else{
-            const bar = svg
-            .append("g")
-            .selectAll("rect")
-            .data(initData)
-            .join("rect")
-            .attr("fill", d => colorScale(d))
-            .join("rect")
-            .style("mix-blend-mode", "multiply") 
-            .attr('class', 'bar')
-            .attr("x", (d, i) => xScale(labels[i]) - barWidth / 2) // center the bars on the tick marks
-            .attr("y", height - 100)
-            .attr("height", 100)
-            .attr("width", barWidth)
-            .text(function(d) { return d; })
-            .on("mouseover", function(event, d){
-                return tooltip.style("visibility", "visible");})
-            .on("mousemove", function(event, d){
-                tooltip.text(d);
-                return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-            .on("mouseout", function(){
-                return tooltip.style("visibility", "hidden");})
-            
-            svg
-                .append('text')
-                .attr('class', 'chart-title')
-                .attr('x', width / 2)
-                .attr('y', margin.top - 10)
-                .attr('text-anchor', 'middle')
-                .style('font-size', '16px')
-                .style('font-weight', 'bold')
-                .text('Time: ' + initTime + 's');
-        }
+
 
         // create the x axis on the bottom
         svg
@@ -287,7 +246,6 @@ function GraphColor({ dataset, time, row, column, type = 'color', velocity = 800
     };
 
     const updateChart = (newData, time) => {
-
         let svg = d3.select(concentrationGraphRef.current)
 
         const bars = svg.selectAll(".bar")
@@ -296,30 +254,10 @@ function GraphColor({ dataset, time, row, column, type = 'color', velocity = 800
 
         svg.select('.chart-title').text('Time: '+ time + 's');
 
-        if(type == 'size'){
-            yScale.domain([d3.min(newData), d3.max(newData)]);
-
-            // Update y-axis
-            svg.select('.y-axis')
-            .transition()
-            .duration(animationSpeedRef.current/2)
-            .call(d3.axisLeft(yScale));
-
-            bars
-            .transition()
-            .duration(animationSpeedRef.current/2)  // duration of the transition in milliseconds
-            .attr("fill", d => colorScale(d))
-            .attr('y', d => yScale(d))
-            .attr('height', d => height - yScale(d))
-
-        } else{
-            bars
-            .transition()
-            .duration(animationSpeedRef.current/2)  // duration of the transition in milliseconds
-            .attr("fill", d => colorScale(d))
-        }
-
-        
+        bars
+        .transition()
+        .duration(animationSpeedRef.current/2)  // duration of the transition in milliseconds
+        .attr("fill", d => colorScale(d))
     };
 
     

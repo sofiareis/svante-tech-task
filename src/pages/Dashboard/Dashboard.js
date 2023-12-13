@@ -9,16 +9,12 @@ import Dropdown from '../../components/Dropdown/Dropdown';
 function Dashboard() {
   const [parsedData, setParsedData] = useState(null);
   const [parsedDataTime, setParsedDataTime] = useState(null);
-  const [colorGraph, setColorGraph] = useState(false);
-  const [sizeGraph, setSizeGraph] = useState(false);
   const [time, setTime] = useState([]); 
   const [selectTime, setSelectTime] = useState([]);
   const [nodes, setNodes] = useState([]); 
   const [selectNodes, setSelectNode] = useState([]);
 
   useEffect(() => {
-    setSizeGraph(false);
-    setColorGraph(false);
   }, [parsedData, parsedDataTime])
 
   const onDataParsed = (data) => {
@@ -39,16 +35,6 @@ function Dashboard() {
     setParsedDataTime(data);
   }
 
-  const showColorGraph = () => {
-    setColorGraph(true);
-    setSizeGraph(false);
-  }
-
-  const showSizeGraph = () => {
-    setSizeGraph(true);
-    setColorGraph(false);
-  }
-
   const handleTimeSelected = (selectedData) => {
     setSelectTime(selectedData)
   };
@@ -65,21 +51,12 @@ function Dashboard() {
         {parsedData && parsedDataTime && 
         <div className='landing-graph'>
           <div className='landing-graph-options'>
-            <button className='button-graph-select' onClick={showColorGraph}>Color Graph</button>
-            <button className='button-graph-select' onClick={showSizeGraph}>Size Graph</button>
             <Dropdown data={time} onDataSelected={handleTimeSelected} type={'times'}/>
             <Dropdown data={nodes} onDataSelected={handleNodeSelected} type={'nodes'}/>
           </div>
-          {colorGraph && 
             <div className='landing-graph-display'>
               <GraphColor dataset={parsedData} time={parsedDataTime} row={selectTime} column={selectNodes}/>
             </div>
-          }
-          {sizeGraph && 
-            <div className='landing-graph-display'>
-              <GraphColor dataset={parsedData} time={parsedDataTime} row={selectTime} column={selectNodes} type='size'/>
-            </div>
-          }
         </div>
         }
         <div className='landing-data'>
